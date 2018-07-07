@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/utils.h
+iostream
+-
+linux/can.h
+-
+vector
+-
+cstring
+-
+
+/home/mairlyn/WMJWorkspace/commodule/src/utils.cpp
+utils.h
+/home/mairlyn/WMJWorkspace/commodule/src/utils.h
+
