@@ -1,0 +1,7 @@
+" ignore build fold
+/build/
+
+
+" such as .vscode .*.swp
+.*
+!.gitignore

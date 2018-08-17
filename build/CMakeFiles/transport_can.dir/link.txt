@@ -1,2 +1,0 @@
-/usr/bin/ar qc libtransport_can.a  CMakeFiles/transport_can.dir/src/transport_can.cpp.o
-/usr/bin/ranlib libtransport_can.a
