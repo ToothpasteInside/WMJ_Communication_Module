@@ -27,7 +27,7 @@ public:
     uint8_t can_len2dlc(uint8_t) ;
     /* parse ASCII hex character to dec number */
     uint8_t asc2nibble(uint8_t) ;
-    
+
     int parse_canframe(Buffer&, canfd_frame&) ;
 private:
 
