@@ -37,30 +37,79 @@ uint8_t wmj::utils::asc2nibble( uint8_t data )
     else return 16 ;
 }
 
-int wmj::utils::parse_canframe(Buffer &data, canfd_frame &frame)
+/**
+ * @brief 将上层数据包打包成CAN帧
+ *
+ * @param data
+ * @param frame
+ *
+ * @return 
+ */
+int wmj::utils::parse_data(Buffer &data, canfd_frame &frame)
 {
     int idx, len ;
     int ret         = CAN_MTU ;
-    uint8_t tmp ;
     
     len             = data.size() ;
     memset( &frame, 0, sizeof(frame) ) ;
 
-    if ( len < 4 )
+    if ( len < 2 )
         return 0 ;
 
-    idx         = 4 ;
-    for ( int i = 0; i < 3; i++ ) {
-        if ( ( tmp = this->asc2nibble(data[i]) ) > 0x0f )
-            return 0 ;
-        //std::cout << tmp << std::endl ;
-        frame.can_id |= ( tmp << (2-i)*4 ) ;
+    idx         = 1 ;
+    switch(data[0])
+    {
+    case 0x01:
+        frame.can_id = 0x301 ;
+        break ;
+    case 0x05:
+        frame.can_id = 0x200 ;
+        break ;
+    case 0x03:
+        frame.can_id = 0x401 ;
+    default:
+        frame.can_id = 0x100 ;
     }
     //std::cout << frame.can_id << std::endl ;
 
-    for ( int i = 0; i < len - 4; i++ ) {
+    for ( int i = 0; i < len - 1; i++ ) {
         frame.data[i] = data[idx++] ;
     }
-    frame.len = len - 4 ;
+    frame.len = len - 1 ;
     return ret ;
+}
+
+/**
+ * @brief 将CAN帧解析为上层数据包
+ *
+ * @param data
+ * @param frame
+ *
+ * @return 
+ */
+int wmj::utils::parse_canframe(Buffer &data, canfd_frame &frame)
+{
+    data.clear() ;
+    switch(frame.can_id)
+    {
+    case 0x302:
+        data.push_back(1) ;
+        break ;
+    case 0x402:
+        data.push_back(3) ;
+        break ;
+    case 0x202:
+        data.push_back(5);
+        break;
+    case 0x313:
+        data.push_back(6);
+        break;
+    default :
+        data.push_back(0) ;
+    }
+    for( auto c : frame.data )
+    {
+        data.push_back(c) ;
+    }
+    return data.size() ;
 }

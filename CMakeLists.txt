@@ -6,5 +6,5 @@ add_compile_options(--std=c++11)
 include_directories(include)
 
 add_library(utils src/utils.cpp)
-add_library(transport_can src/transport_can.cpp)
-target_link_libraries(transport_can utils pthread)
+add_library(TransportCan src/TransportCan.cpp)
+target_link_libraries(TransportCan utils pthread)
